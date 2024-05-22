@@ -1,0 +1,11 @@
+export { Button } from './Button';
+export { Navbar } from './Navbar';
+export { Banner } from './Banner';
+export { Hero2 } from './Hero2';
+export { Hero3 } from './Hero3';
+export { Faqs } from './Faqs';
+export { Faq } from './Faq'; 
+export { Footer } from './Footer';
+export { ArtPolicy} from './ArtPolicy';
+export { Politica } from './Politica';
+export { ButtonsPad } from './ButtonsPad';
