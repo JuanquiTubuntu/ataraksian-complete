@@ -7,6 +7,19 @@ import TIKOK from '../../../../../public/tickok.png';
 import TIKNOT from '../../../../../public/ticknot.png';
 import { Link } from "@/navigation";
 import { useRouter } from "next/navigation";
+import { CognitoUserPool } from 'amazon-cognito-identity-js';
+
+type AttributeType = {
+    Name: string;
+    Value: string;
+};
+
+
+const poolData = {
+    UserPoolId: 'us-east-1_FgTFcwcCy', // Tu User Pool ID
+    ClientId: '601rja4adsr0v7t69orlprqepf' // Tu Client ID
+};
+const userPool = new CognitoUserPool(poolData);
 
 export default function CreatePassword() {
     const t = useTranslations("CreatePassword");
@@ -24,7 +37,7 @@ export default function CreatePassword() {
 
     const router = useRouter();
 
-    
+
 
     const validatePassword = useCallback(() => {
         const lengthValid = password.length >= 8;
@@ -57,8 +70,24 @@ export default function CreatePassword() {
             return;
         }
 
-        router.push('/register/password/mailsent');
+        const email = sessionStorage.getItem('email');
 
+        if (email) {
+            userPool.signUp(email, password, [], [], (err, result) => {
+                if (err) {
+                    // Maneja el error
+                    console.error(err);
+                    return;
+                }
+
+                // El usuario se ha registrado correctamente
+                if (result) {
+                    const cognitoUser = result.user;
+                    console.log('user name is ' + cognitoUser.getUsername());
+                }
+            });
+        }
+        router.push('/register/password/mailsent');
 
     };
 
@@ -74,7 +103,7 @@ export default function CreatePassword() {
         <section className="py-registerSectionY background-pattern flex justify-center items-center w-full mobile:p-8 h-screen">
             <form onSubmit={handleSubmit} className="border-2 border-neutral-950 w-registerForm bg-white rounded-registerForm flex flex-col items-center justify-between gap-4 pt-formT pb-formR px-formR mobile:w-full mobile:p-8">
                 <Link className='self-start cursor-pointer' href="/register">
-                    <Image  src="/leftarrowblack.png" alt="404" width={24} height={28} />
+                    <Image src="/leftarrowblack.png" alt="404" width={24} height={28} />
                 </Link>
                 <span className='text-xl text-center font-medium bg-textHero rounded-textHero py-1.5 px-4 mobile:text-lg mobile:py-1.5 mobile:px-4'>2/5</span>
                 <h1 className="w-paragraphWaitingList leading-mobileHigh text-5xl mb-20 font-bold text-center mobile:text-3xl">{t('title')}</h1>
