@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 export default function RegisterPage() {
     const t = useTranslations("RegisterForm");
@@ -62,6 +63,17 @@ export default function RegisterPage() {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
+
+        const attributeList = [
+            new CognitoUserAttribute({ Name: 'email', Value: email }),
+            new CognitoUserAttribute({ Name: 'phone_number', Value: phone }),
+            new CognitoUserAttribute({ Name: 'name', Value: name }),
+            new CognitoUserAttribute({ Name: 'family_name', Value: lastName }),
+            new CognitoUserAttribute({ Name: 'custom:dni', Value: dni }),
+        ];
+
+        sessionStorage.setItem('email', email);
+
         if (!validForm) {
             if (!validateEmail(email)) {
                 setEmailError(t('invalidEmail'));
