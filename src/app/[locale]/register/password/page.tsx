@@ -8,6 +8,7 @@ import TIKNOT from '../../../../../public/ticknot.png';
 import { Link } from "@/navigation";
 import { useRouter } from "next/navigation";
 import { CognitoUserPool } from 'amazon-cognito-identity-js';
+import { postData } from "@/data/postClients";
 
 type AttributeType = {
     Name: string;
@@ -16,8 +17,8 @@ type AttributeType = {
 
 
 const poolData = {
-    UserPoolId: 'us-east-1_FgTFcwcCy', // Tu User Pool ID
-    ClientId: '601rja4adsr0v7t69orlprqepf' // Tu Client ID
+    UserPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID || '',
+    ClientId: process.env.NEXT_PUBLIC_CLIENT_ID || ''
 };
 const userPool = new CognitoUserPool(poolData);
 
@@ -36,8 +37,6 @@ export default function CreatePassword() {
     const [validLength, setValidLength] = useState(false);
 
     const router = useRouter();
-
-
 
     const validatePassword = useCallback(() => {
         const lengthValid = password.length >= 8;
@@ -84,6 +83,7 @@ export default function CreatePassword() {
                 if (result) {
                     const cognitoUser = result.user;
                     console.log('user name is ' + cognitoUser.getUsername());
+                    postData();
                 }
             });
         }
