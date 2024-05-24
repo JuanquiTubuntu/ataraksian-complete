@@ -4,11 +4,12 @@ export const postData = async () => {
     const username = sessionStorage.getItem('name');
     const lastname = sessionStorage.getItem('family_name');
     const dni = sessionStorage.getItem('custom:dni');
+    const phone_number = sessionStorage.getItem('phone_number');
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
     try {
-        const response = await fetch(API_URL + '/api/mail', {
+        const response = await fetch(API_URL + '/api/publicclient', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -18,6 +19,7 @@ export const postData = async () => {
                 lastname: lastname,
                 email: email,
                 passport: dni,
+                phone_number: phone_number
             }),
         });
 
